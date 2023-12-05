@@ -1,0 +1,82 @@
+<div class="col-xl-2 col-md-3 mb-2" routerLink="/cust" style="cursor: pointer">
+  <div class="card border-left-primary shadow h-100 py-2">
+    <div class="card-body">
+      <div class="row no-gutters align-items-center">
+        <div class="col mr-2">
+          <div
+            class="text-xs font-weight-bold text-primary text-uppercase mb-1"
+          >
+            Total Customer
+            <span
+              class="glyphicon glyphicon-user"
+              style="float: right; font-size: 47px"
+            ></span>
+          </div>
+          <div class="h5 mb-0 font-weight-bold text-gray-800">
+            {{ totalCustomer }}
+          </div>
+        </div>
+        <div class="col-auto">
+          <i class="fas fa-calendar fa-2x text-gray-300"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div
+  class="col-xl-2 col-md-3 mb-2"
+  routerLink="/delivery"
+  style="cursor: pointer"
+>
+  <div class="card border-left-primary shadow h-100 py-2">
+    <div class="card-body">
+      <div class="row no-gutters align-items-center">
+        <div class="col mr-2">
+          <div
+            class="text-xs font-weight-bold text-primary text-uppercase mb-1"
+          >
+            Todays Jar
+            <span
+              class="glyphicon glyphicon-briefcase"
+              style="float: right; font-size: 47px"
+            ></span>
+          </div>
+          <div class="h5 mb-0 font-weight-bold text-gray-800">
+            {{ totalTodaysJar }} ({{
+              totalTodaysJarAmount | currency : "&#8377;"
+            }})
+          </div>
+        </div>
+        <div class="col-auto">
+          <i class="fas fa-calendar fa-2x text-gray-300"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="col-xl-12 col-lg-12 col-md-12  mb-2">
+  <div class="card" *ngIf="isShowChart">
+    <canvas
+      baseChart
+      [data]="barChartData"
+      [options]="barChartOptions"
+      [plugins]="barChartPlugins"
+      [legend]="barChartLegend"
+      [type]="'bar'"
+    >
+    </canvas>
+  </div>
+</div>
+<div class="col-xl-12 col-lg-12 col-md-12  mb-2">
+  <div class="card" *ngIf="isShowChart">
+    <canvas
+      baseChart
+      [data]="barChartDataAmount"
+      [options]="barChartOptions"
+      [plugins]="barChartPlugins"
+      [legend]="barChartLegend"
+      [type]="'bar'"
+    >
+    </canvas>
+  </div>
+</div>

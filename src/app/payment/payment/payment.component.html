@@ -1,0 +1,130 @@
+<h4 class="mt-0" style="text-align: center">Payment</h4>
+<div class="col-md-12 mb-2 p-0">
+  <div class="col-md-6" style="margin: 0 auto">
+    <div class="ng-autocomplete">
+      <ng-autocomplete
+        [data]="customerList"
+        [searchKeyword]="keyword"
+        placeholder="Select Customer"
+        (selected)="selectEvent($event)"
+        [itemTemplate]="itemTemplate"
+        [notFoundTemplate]="notFoundTemplate"
+      >
+      </ng-autocomplete>
+
+      <ng-template #itemTemplate let-item>
+        <a [innerHTML]="item.name"></a>
+      </ng-template>
+
+      <ng-template #notFoundTemplate let-notFound>
+        <div [innerHTML]="notFound"></div>
+      </ng-template>
+    </div>
+  </div>
+</div>
+<div class="col-md-12" *ngIf="selectedCustomer != null">
+  <div class="panel panel-primary">
+    <div class="panel-heading">Customer Details</div>
+    <div class="panel-body">
+      <h4>
+        <b>Name </b>: {{ selectedCustomer.name }}({{ selectedCustomer.number }})
+      </h4>
+      <h4><b>Address</b> : {{ selectedCustomer.address }}</h4>
+      <hr />
+      <div class="form-group">
+        <label for="email">Amount </label>
+        <input
+          type="number"
+          class="form-control"
+          [(ngModel)]="amount"
+          placeholder="Enter Number amount"
+          id="name"
+        />
+      </div>
+      <div class="form-group">
+        <label for="email">Date </label>
+        <input
+          type="date"
+          class="form-control"
+          [(ngModel)]="currentDate"
+          id="name"
+        />
+      </div>
+      <button type="button" (click)="saveDailyEntry()" class="btn btn-primary">
+        {{ isEditEntry == false ? "Add Payment" : "Update Payment" }}
+      </button>
+      <button
+        type="button"
+        class="btn btn-primary ml-2"
+        (click)="closeWindow()"
+      >
+        Cancel
+      </button>
+    </div>
+  </div>
+</div>
+<hr />
+<div class="col-md-12">
+  <div class="col-md-12 p-0">
+    <div
+      class="col-md-12 mb-2 p-0"
+      style="margin-bottom: 10px; padding-right: 0"
+    >
+      <div class="col-md-12 mb-2 p-0">
+        <input
+          type="date"
+          class="form-control"
+          [(ngModel)]="filterDate"
+          (ngModelChange)="getDailyEntryList()"
+          id="name"
+        />
+      </div>
+      <div class="col-md-12 mb-2 p-0">
+        <input
+          [(ngModel)]="searchText"
+          placeholder="search name"
+          class="form-control"
+        />
+      </div>
+    </div>
+  </div>
+  <table class="table table-striped">
+    <thead>
+      <tr style="background: #a7d5d1">
+        <th>Name</th>
+        <th>Amount</th>
+        <th>Date</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        *ngFor="let item of dailyEntryList | filter : searchText; let i = index"
+      >
+        <td>{{ item.name }}</td>
+        <td>
+          <b>{{ item.amount }}</b>
+        </td>
+        <td>{{ item.entryDate }}</td>
+        <td style="padding-left: 0; padding-right: 0">
+          <span
+            class="glyphicon glyphicon-edit"
+            style="cursor: pointer"
+            (click)="editDailyEntry(item)"
+          ></span>
+          <span
+            (click)="deactivateEntry(item)"
+            class="glyphicon glyphicon-trash ml-3"
+            style="cursor: pointer; margin-left: 16px"
+          ></span>
+        </td>
+      </tr>
+    </tbody>
+    <tr style="background: #d2e6e4">
+      <th>Total Amount</th>
+      <th ><b>{{getTotalPurchseJarPrice() | currency:'&#8377;' }}</b></th>
+      <th colspan="2"></th>
+
+    </tr>
+  </table>
+</div>

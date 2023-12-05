@@ -1,0 +1,38 @@
+/* You can add global styles to this file, and also import other style files */
+.ml-2 {
+  margin-left: 4px;
+}
+.ml-3 {
+  margin-left: 6px;
+}
+.mt-0 {
+  margin-top: 0;
+}
+
+.mt-2 {
+  margin-top: 4px;
+}
+.mb-2 {
+  margin-bottom: 4px;
+}
+.p-0 {
+  padding: 0;
+}
+.text-danger {
+  color: red;
+}
+.text-white {
+  color: #fff;
+}
+
+.ng-autocomplete {
+  width: 100% !important;
+}
+body {
+  background: #efefef;
+  font-family: sans-serif!important;
+}
+.container
+{
+  padding: 0!important;
+}

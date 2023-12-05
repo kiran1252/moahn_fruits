@@ -1,0 +1,51 @@
+<button
+  type="button"
+  class="btn btn-primary"
+  style="float: right; margin-bottom: 20px"
+  routerLink="/new-cust"
+>
+  Add New Customer
+</button>
+<h4 class="mt-0">Customer List</h4>
+<div class="col-md-12 mb-2 p-0">
+  <div
+    class="col-md-6"
+    style="float: right; margin-bottom: 10px; padding-right: 0"
+  >
+    <input
+      [(ngModel)]="searchText"
+      placeholder="search name"
+      class="form-control"
+    />
+  </div>
+</div>
+<table class="table table-striped">
+  <thead>
+    <tr style="background: #a7d5d1">
+      <th>Name</th>
+      <th>Address</th>
+      <th>Mobile No</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of customerList | filter : searchText; let i = index">
+      <td><b>{{ item.name }}</b></td>
+      <td>{{ item.address }}</td>
+      <td>{{ item.number }}</td>
+      <td style="padding-left: 0;
+      padding-right: 0;">
+        <span
+          class="glyphicon glyphicon-edit"
+          style="cursor: pointer"
+          routerLink="/new-cust/{{ item.customerId }}"
+        ></span>
+        <span
+          class="glyphicon glyphicon-trash ml-3"
+          style="cursor: pointer;    margin-left: 16px;"
+          (click)="deleteCustomer(item.customerId)"
+        ></span>
+      </td>
+    </tr>
+  </tbody>
+</table>
