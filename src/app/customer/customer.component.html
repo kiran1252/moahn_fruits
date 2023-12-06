@@ -1,16 +1,28 @@
 <button
   type="button"
   class="btn btn-primary"
-  style="float: right; margin-bottom: 20px"
+  style="float: right;
+  margin-bottom: 20px;
+  margin-right: 13px;"
   routerLink="/new-cust"
 >
-  Add New Customer
+  New Expence
 </button>
-<h4 class="mt-0">Customer List</h4>
-<div class="col-md-12 mb-2 p-0">
+
+  <input
+    type="date"
+    class="form-control " style="width: 90%;
+    margin: 5% 0 0 5%;"
+    [(ngModel)]="filterDate"
+    (ngModelChange)="getCustomerList()"
+    id="name"
+  />
+
+<h4 class="mt-0">Expence List</h4>
+<!-- <div class="col-md-12 mb-2 p-0">
   <div
     class="col-md-6"
-    style="float: right; margin-bottom: 10px; padding-right: 0"
+    style=" margin-bottom: 10px; "
   >
     <input
       [(ngModel)]="searchText"
@@ -18,32 +30,33 @@
       class="form-control"
     />
   </div>
-</div>
-<table class="table table-striped">
+</div> -->
+
+<table class="table table-bordered" style="color: #fff;">
   <thead>
-    <tr style="background: #a7d5d1">
-      <th>Name</th>
-      <th>Address</th>
-      <th>Mobile No</th>
+    <tr style="background: #2c5154">
+      <th>Description</th>
+      <th>Cash/Online</th>
+      <th>Amount</th>
       <th>Action</th>
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let item of customerList | filter : searchText; let i = index">
-      <td><b>{{ item.name }}</b></td>
-      <td>{{ item.address }}</td>
-      <td>{{ item.number }}</td>
-      <td style="padding-left: 0;
+    <tr *ngFor="let item of dailyExpenceList | filter : searchText; let i = index">
+      <td>{{ item.name }}</td>
+      <td>{{ item.type | uppercase }}</td>
+      <td>{{ item.amount | currency : "&#8377;" }}</td>
+      <td style="padding-left: 6px;
       padding-right: 0;">
         <span
           class="glyphicon glyphicon-edit"
           style="cursor: pointer"
-          routerLink="/new-cust/{{ item.customerId }}"
+          routerLink="/new-cust/{{ item.dailyExpenceId }}"
         ></span>
         <span
           class="glyphicon glyphicon-trash ml-3"
           style="cursor: pointer;    margin-left: 16px;"
-          (click)="deleteCustomer(item.customerId)"
+          (click)="deleteCustomer(item.dailyExpenceId)"
         ></span>
       </td>
     </tr>

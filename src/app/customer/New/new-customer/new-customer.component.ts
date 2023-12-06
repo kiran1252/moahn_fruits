@@ -18,25 +18,30 @@ export class NewCustomerComponent implements OnInit {
     private datePipe: DatePipe
   ) {}
   myForm: any;
-  customerId: any = null;
+  dailyExpenceId: any = null;
+  filterDate: any = new Date();
+  todaysDate: any = new Date();
   ngOnInit(): void {
+    this.todaysDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
     this.myForm = this.fb.group({
-      customerId: [new Date().valueOf()],
+      dailyExpenceId: [new Date().valueOf()],
       name: ['', [Validators.required]],
-      address: ['', [Validators.required]],
-      rate: [null, [Validators.required]],
-      number: ['', [Validators.required]],
+      type: ['cash', [Validators.required]],
+      amount: [null, [Validators.required]],
+      month: [this.getCurrentMoth(this.filterDate)],
       createdDate: [this.datePipe.transform(new Date(), 'yyyy-MM-dd')],
+      currentDate:[this.datePipe.transform(new Date(), 'yyyy-MM-dd'), [Validators.required]],
+      entryTimestampDate: [new Date(this.todaysDate).getTime()]
     });
     this.route.paramMap.subscribe((params) => {
       if (params.get('id') != null) {
-        this.customerId = params.get('id');
+        this.dailyExpenceId = params.get('id');
         this.getDataFromDB();
       }
     });
   }
   async getDataFromDB() {
-    const docRef = doc(this.firbaseService.db, 'Customer/' + this.customerId);
+    const docRef = doc(this.firbaseService.db, 'dailyExpence/' + this.dailyExpenceId);
     const docSnap = await getDoc(docRef);
     this.myForm.patchValue(docSnap.data());
   }
@@ -45,26 +50,45 @@ export class NewCustomerComponent implements OnInit {
       form.markAllAsTouched();
       return;
     }
-    if (this.customerId == null) {
+    this.myForm.value.entryTimestampDate = new Date(this.myForm.value.currentDate).getTime()
+    if (this.dailyExpenceId == null) {
       setDoc(
         doc(
           this.firbaseService.db,
-          'Customer',
-          '' + this.myForm.value.customerId
+          'dailyExpence',
+          '' + this.myForm.value.dailyExpenceId
         ),
         form.value
       ).then(() => {
-        alert('Customer added successfully!');
+        alert('Daily expence added successfully!');
         this.router.navigate(['/cust']);
       });
     } else {
       updateDoc(
-        doc(this.firbaseService.db, 'Customer', '' + this.customerId),
+        doc(this.firbaseService.db, 'dailyExpence', '' + this.dailyExpenceId),
         form.value
       ).then(() => {
-        alert('Customer updated successfully!');
+        alert('Daily expence updated successfully!');
         this.router.navigate(['/cust']);
       });
     }
+  }
+  getCurrentMoth(date: any) {
+    const month = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ];
+    const d = new Date(date);
+    return month[d.getMonth()];
   }
 }

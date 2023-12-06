@@ -14,9 +14,8 @@ export class HomeComponent implements OnInit {
     private firbaseService: FirbaseService,
     private datePipe: DatePipe
   ) {}
-  totalCustomer: any = 0;
-  totalTodaysJar: any = 0;
-  totalTodaysJarAmount: any = 0;
+  totalExpence: any = 0;
+  totalIncome: any = 0;
   dailyEntryList: any = [];
   filterDate: any = new Date();
   filterFromDate: any = new Date(new Date().getFullYear(), 0, 1);
@@ -26,90 +25,46 @@ export class HomeComponent implements OnInit {
   public barChartLegend = true;
   public barChartPlugins = [];
   isShowChart:boolean = false;
-
-  public barChartData: ChartConfiguration<'bar'>['data'] = {
-    labels: [],
-    datasets: [
-      { data: [], label: 'No of Jar' },
-    ],
-    
-  };
-  public barChartDataAmount: ChartConfiguration<'bar'>['data'] = {
-    labels: [],
-    datasets: [
-      { data: [], label: 'Amount' }
-    ],
-  
-  };
   
   public barChartOptions: ChartOptions  = {
     responsive: false,
   };
   ngOnInit(): void {
-    this.getCustomerList();
     this.filterDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
-    this.filterFromDate = this.datePipe.transform(this.filterFromDate, 'yyyy-MM-dd');
-    this.filterToDate = this.datePipe.transform(this.filterToDate, 'yyyy-MM-dd');
-    this.getDailyEntryForBarchartList();
     this.getDailyEntryList();
+    this.getCustomerList();
   }
 
   async getCustomerList() {
-    var colData = collection(this.firbaseService.db, 'Customer');
-    const citySnapshot = await getDocs(colData);
-    var customerList: any = citySnapshot.docs.map((doc) => doc.data());
-    this.totalCustomer = customerList.length;
+    var colData = collection(this.firbaseService.db, 'dailyExpence');
+    const q = query(
+      colData,
+      where('currentDate', '==', this.filterDate)
+    );
+    const data = await getDocs(q);
+    var dailyExpenceList = data.docs.map((doc) => doc.data());
+    this.totalExpence = dailyExpenceList.reduce(
+      (partialSum: any, a: any) => partialSum + a.amount,
+      0
+    );
+    
   }
 
   async getDailyEntryList() {
-    var colData = collection(this.firbaseService.db, 'DailyJarEntry');
+    var colData = collection(this.firbaseService.db, 'DailyIncomeEntry');
     const q = query(
       colData,
       where('isActive', '==', true),
-      where('entryDate', '==', this.filterDate)
+      where('createddate', '==', this.filterDate)
     );
     const data = await getDocs(q);
     this.dailyEntryList = data.docs.map((doc) => doc.data());
-    this.totalTodaysJar = this.dailyEntryList.reduce(
-      (partialSum: any, a: any) => partialSum + a.NoJar,
+    this.totalIncome = this.dailyEntryList.reduce(
+      (partialSum: any, a: any) => partialSum + a.amount,
       0
     );
-    this.totalTodaysJarAmount = this.dailyEntryList.reduce(
-      (partialSum: any, a: any) => partialSum + a.jarCalculatedPrice,
-      0
-    );
+    
   }
 
-  async getDailyEntryForBarchartList() {
-    this.dailyEntryList = [];
-    var colData = collection(this.firbaseService.db, 'DailyJarEntry');
-    const q = query(
-      colData,
-      where('isActive', '==', true),
-      where(
-        'entryTimestampDate',
-        '>=',
-        new Date(this.filterFromDate).getTime()
-      ),
-      where('entryTimestampDate', '<=', new Date(this.filterToDate).getTime())
-    );
-    const data = await getDocs(q);
-    var dataList = data.docs.map((doc) => doc.data());
-    var grouped: any = {};
-    grouped = mapValues(groupBy(dataList, 'month'), (clist) =>
-      clist.map((car) => omit(car, 'month'))
-    );
-    for (const key in grouped) {
-      if (Object.prototype.hasOwnProperty.call(grouped, key)) {
-        const element = grouped[key];
-        this.barChartData.labels?.push(key);
-        this.barChartDataAmount.labels?.push(key);
-        this.barChartData.datasets[0].data.push(sumBy(element, 'NoJar'));
-        this.barChartDataAmount.datasets[0].data.push(
-          sumBy(element, 'jarCalculatedPrice')
-        );
-      }
-    }
-    this.isShowChart = true;
-  }
+  
 }

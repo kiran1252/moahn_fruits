@@ -4,16 +4,18 @@
       <div class="row no-gutters align-items-center">
         <div class="col mr-2">
           <div
-            class="text-xs font-weight-bold text-primary text-uppercase mb-1"
+            class="text-xs font-weight-bold text-primary text-uppercase mb-1" style="color: #ffeb00;"
           >
-            Total Customer
+            Todays Expence
             <span
               class="glyphicon glyphicon-user"
-              style="float: right; font-size: 47px"
+              style="float: right; font-size: 47px;    color: #ffeb00;"
             ></span>
           </div>
           <div class="h5 mb-0 font-weight-bold text-gray-800">
-            {{ totalCustomer }}
+            {{
+              totalExpence | currency : "&#8377;"
+            }}
           </div>
         </div>
         <div class="col-auto">
@@ -33,18 +35,18 @@
       <div class="row no-gutters align-items-center">
         <div class="col mr-2">
           <div
-            class="text-xs font-weight-bold text-primary text-uppercase mb-1"
+            class="text-xs font-weight-bold text-primary text-uppercase mb-1" style="color: #ff8100;"
           >
-            Todays Jar
+            Todays Income
             <span
               class="glyphicon glyphicon-briefcase"
-              style="float: right; font-size: 47px"
+              style="float: right; font-size: 47px;    color: #ff8100;"
             ></span>
           </div>
           <div class="h5 mb-0 font-weight-bold text-gray-800">
-            {{ totalTodaysJar }} ({{
-              totalTodaysJarAmount | currency : "&#8377;"
-            }})
+            {{
+              totalIncome | currency : "&#8377;"
+            }}
           </div>
         </div>
         <div class="col-auto">
@@ -52,31 +54,5 @@
         </div>
       </div>
     </div>
-  </div>
-</div>
-<div class="col-xl-12 col-lg-12 col-md-12  mb-2">
-  <div class="card" *ngIf="isShowChart">
-    <canvas
-      baseChart
-      [data]="barChartData"
-      [options]="barChartOptions"
-      [plugins]="barChartPlugins"
-      [legend]="barChartLegend"
-      [type]="'bar'"
-    >
-    </canvas>
-  </div>
-</div>
-<div class="col-xl-12 col-lg-12 col-md-12  mb-2">
-  <div class="card" *ngIf="isShowChart">
-    <canvas
-      baseChart
-      [data]="barChartDataAmount"
-      [options]="barChartOptions"
-      [plugins]="barChartPlugins"
-      [legend]="barChartLegend"
-      [type]="'bar'"
-    >
-    </canvas>
   </div>
 </div>

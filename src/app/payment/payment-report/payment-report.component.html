@@ -1,36 +1,34 @@
-<div class="col-md-6 mt-2" style="margin-top: 10px">
+<div class="col-md-6 mt-2" style="margin-top: 0px">
   <label for="pwd">From Date </label>
   <input
     type="date"
     class="form-control"
     [(ngModel)]="filterFromDate"
-    (ngModelChange)="getDailyEntryList()"
+    (ngModelChange)="getdailyExpence()"
     id="name"
   />
 </div>
-<div class="col-md-6 mt-2" style="margin-top: 10px">
+<div class="col-md-6 mt-2" style="margin-top: 0px">
   <label for="pwd">To Date </label>
   <input
     type="date"
     class="form-control"
     [(ngModel)]="filterToDate"
-    (ngModelChange)="getDailyEntryList()"
+    (ngModelChange)="getdailyExpence()"
     id="name"
   />
 </div>
-<div class="col-md-6 mt-2" style="margin-top: 10px">
+<div class="col-md-6 mt-2" style="margin-top: 0px">
   <div class="form-group">
     <label for="sel1">Select list:</label>
     <select
       class="form-control"
       id="sel1"
       [(ngModel)]="filterOtion"
-      (change)="getDailyEntryList()"
+      (change)="getdailyExpence()"
     >
-      <option value="1">All</option>
-      <option value="2">Customer</option>
-      <option value="3">Date</option>
-      <option value="4">Month</option>
+      <option value="1">Date</option>
+      <option value="2">Month</option>
     </select>
   </div>
 </div>
@@ -39,27 +37,28 @@
   style="margin-top: 20px"
   *ngIf="dailyEntryList.length > 0"
 >
-  <table class="table table-striped" id="htmlData" #htmlData>
+  <table class="table table-bordered" style="color: #fff;" id="htmlData" #htmlData>
     <thead>
-      <tr style="background: #a7d5d1">
-        <th>SR.No</th>
+      <tr style="background: #2c5154">
         <th>Name</th>
-        <th *ngIf="filterOtion == 1">Date</th>
-        <th>Amount</th>
+        <th>Expence</th>
+        <th>Income</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let item of dailyEntryList; let i = index">
-        <td>{{ i + 1 }}</td>
         <td>{{ item.name }}</td>
-        <td *ngIf="filterOtion == 1">{{ item.entryDate }}</td>
-        <td>{{ item.amount | currency : "&#8377;" }}</td>
+        <td>{{ item.expence | currency : "&#8377;" }}</td>
+        <td>{{ item.income | currency : "&#8377;" }}</td>
       </tr>
     </tbody>
-    <tr style="background: #d2e6e4">
-      <th [attr.colspan]="filterOtion == 1 ? 3 : 2" style="text-align: center">Total</th>
-      <th colspan="2" >
-        {{ getTotalPurchseJarPrice() | currency : "&#8377;" }}
+    <tr style="background: #2c5154">
+      <th colspan="1" style="text-align: center;">Total</th>
+      <th  >
+        {{ getTotalExpence() | currency : "&#8377;" }}
+      </th>
+      <th  >
+        {{ getTotalIncome() | currency : "&#8377;" }}
       </th>
     </tr>
   </table>

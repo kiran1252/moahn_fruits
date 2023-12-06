@@ -1,11 +1,12 @@
 export const environment = {
   production: true,
   firebaseConfig:  {
-    apiKey: 'AIzaSyAljlHaJr-Jt1swtOVSybfd38m0lRKCGSM',
-    authDomain: 'jarplant-876e3.firebaseapp.com',
-    projectId: 'jarplant-876e3',
-    storageBucket: 'jarplant-876e3.appspot.com',
-    messagingSenderId: '625815507738',
-    appId: '1:625815507738:web:479d2cef001a94f1fd92a3',
+    apiKey: "AIzaSyAkNAcpALgLuBn30j-k1FmJOgT8rjTS69I",
+    authDomain: "sahyadrilights-ac006.firebaseapp.com",
+    projectId: "sahyadrilights-ac006",
+    storageBucket: "sahyadrilights-ac006.appspot.com",
+    messagingSenderId: "72994585339",
+    appId: "1:72994585339:web:642a7e0a1f03058e1b8e5e",
+    measurementId: "G-MZPD8NCKJ0"
   }
 };

@@ -13,24 +13,23 @@ export class PaymentReportComponent implements OnInit {
   constructor(
     private firbaseService: FirbaseService,
     private datePipe: DatePipe
-  ) {}
+  ) { }
   filterFromDate: any = new Date();
   filterToDate: any = new Date();
   dailyEntryList: any = [];
   filterOtion: number = 1;
-
+  filterDate: any = new Date();
   ngOnInit(): void {
     this.filterFromDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
     this.filterToDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
-    this.getDailyEntryList();
+    this.getdailyExpence();
   }
 
-  async getDailyEntryList() {
+  async getdailyExpence() {
     this.dailyEntryList = [];
-    var colData = collection(this.firbaseService.db, 'payment');
+    var colData = collection(this.firbaseService.db, 'dailyExpence');
     const q = query(
       colData,
-      where('isActive', '==', true),
       where(
         'entryTimestampDate',
         '>=',
@@ -40,54 +39,95 @@ export class PaymentReportComponent implements OnInit {
     );
     const data = await getDocs(q);
     var dataList = data.docs.map((doc) => doc.data());
+
     var grouped: any = {};
-    if (this.filterOtion != 1) {
-      if (this.filterOtion == 2) {
-        grouped = mapValues(groupBy(dataList, 'name'), (clist) =>
-          clist.map((car) => omit(car, 'name'))
-        );
+    if (this.filterOtion == 1) {
+      grouped = mapValues(groupBy(dataList, 'currentDate'), (clist) =>
+        clist.map((car) => omit(car, 'currentDate'))
+      );
+    }
+    if (this.filterOtion == 2) {
+      grouped = mapValues(groupBy(dataList, 'month'), (clist) =>
+        clist.map((car) => omit(car, 'month'))
+      );
+    }
+
+    for (const key in grouped) {
+      if (Object.prototype.hasOwnProperty.call(grouped, key)) {
+        const element = grouped[key];
+        var obj: any = {};
+        obj.name = key;
+        obj.expence = sumBy(element, 'amount');
+        obj.income = 0;
+        this.dailyEntryList.push(obj);
       }
-      if (this.filterOtion == 3) {
-        grouped = mapValues(groupBy(dataList, 'entryDate'), (clist) =>
-          clist.map((car) => omit(car, 'entryDate'))
-        );
-      }
-      if (this.filterOtion == 4) {
-        grouped = mapValues(groupBy(dataList, 'month'), (clist) =>
-          clist.map((car) => omit(car, 'month'))
-        );
-      }
-      for (const key in grouped) {
-        if (Object.prototype.hasOwnProperty.call(grouped, key)) {
-          const element = grouped[key];
+    }
+    this.getdailyIncome();
+  }
+
+  async getdailyIncome() {
+    var colData = collection(this.firbaseService.db, 'DailyIncomeEntry');
+    const q = query(
+      colData,
+      where(
+        'entryTimestampDate',
+        '>=',
+        new Date(this.filterFromDate).getTime()
+      ),
+      where('entryTimestampDate', '<=', new Date(this.filterToDate).getTime())
+    );
+    const data = await getDocs(q);
+    var dataList = data.docs.map((doc) => doc.data());
+    
+    var grouped: any = {};
+    if (this.filterOtion == 1) {
+      grouped = mapValues(groupBy(dataList, 'createddate'), (clist) =>
+        clist.map((car) => omit(car, 'createddate'))
+      );
+    }
+    if (this.filterOtion == 2) {
+      grouped = mapValues(groupBy(dataList, 'month'), (clist) =>
+        clist.map((car) => omit(car, 'month'))
+      );
+    }
+
+    for (const key in grouped) {
+      if (Object.prototype.hasOwnProperty.call(grouped, key)) {
+        const element = grouped[key];
+        
+        var isexist = this.dailyEntryList.filter((w:any)=>w.name == key);
+        if(isexist.length > 0){
+          isexist[0].income = sumBy(element, 'amount');
+        }else
+        {
           var obj: any = {};
           obj.name = key;
-          obj.amount = sumBy(element, 'amount');
+          obj.income = sumBy(element, 'amount');
+          obj.expence = 0;
           this.dailyEntryList.push(obj);
         }
       }
-    } else {
-      this.dailyEntryList = dataList;
     }
   }
 
-  getTotalJar() {
+
+  getTotalExpence() {
     if (this.dailyEntryList.length > 0) {
       return this.dailyEntryList.reduce(
-        (partialSum: any, a: any) => partialSum + a.NoJar,
+        (partialSum: any, a: any) => partialSum + a.expence,
+        0
+      );
+    }
+    return 0;
+  }
+  getTotalIncome() {
+    if (this.dailyEntryList.length > 0) {
+      return this.dailyEntryList.reduce(
+        (partialSum: any, a: any) => partialSum + a.income,
         0
       );
     }
     return 0;
   }
 
-  getTotalPurchseJarPrice() {
-    if (this.dailyEntryList.length > 0) {
-      return this.dailyEntryList.reduce(
-        (partialSum: any, a: any) => partialSum + a.amount,
-        0
-      );
-    }
-    return 0;
-  }
 }

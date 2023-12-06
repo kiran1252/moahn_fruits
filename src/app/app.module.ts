@@ -13,10 +13,7 @@ import { AutocompleteLibModule } from 'angular-ng-autocomplete';
 import { DatePipe } from '@angular/common';
 import { LoginComponent } from './login/login.component';
 import { AuthGuard } from './auth.gaurd';
-import { CustomerWiseBillingComponent } from './billing/customer-wise-billing/customer-wise-billing.component';
 import { NgChartsModule } from 'ng2-charts';
-import { PeriodwiseBillingComponent } from './billing/periodwise-billing/periodwise-billing.component';
-import { PaymentComponent } from './payment/payment/payment.component';
 import { PaymentReportComponent } from './payment/payment-report/payment-report.component';
 @NgModule({
   declarations: [
@@ -27,9 +24,6 @@ import { PaymentReportComponent } from './payment/payment-report/payment-report.
     FilterPipe,
     DailyDeliveryComponent,
     LoginComponent,
-    CustomerWiseBillingComponent,
-    PeriodwiseBillingComponent,
-    PaymentComponent,
     PaymentReportComponent
   ],
   imports: [

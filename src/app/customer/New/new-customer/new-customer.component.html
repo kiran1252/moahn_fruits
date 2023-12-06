@@ -1,14 +1,23 @@
 <div class="panel panel-default">
   <div class="panel-body">
-    <h4 class="mt-0">New Customer</h4>
+    <h4 class="mt-0">New Expence</h4>
     <form [formGroup]="myForm" (ngSubmit)="onSubmit(myForm)">
       <div class="form-group">
-        <label for="email">Name <label class="text-danger">*</label></label>
+        <label for="email">Date </label>
+        <input
+          type="date"
+          class="form-control"
+          formControlName="currentDate"
+          id="name"
+        />
+      </div>
+      <div class="form-group">
+        <label for="email">Expence For <label class="text-danger">*</label></label>
         <input
           type="text"
           class="form-control"
           formControlName="name"
-          placeholder="Enter Customer Name"
+          placeholder="Enter expence details"
           id="name"
         />
         <div
@@ -22,63 +31,42 @@
         </div>
       </div>
       <div class="form-group">
-        <label for="pwd">Address <label class="text-danger">*</label> </label>
-        <textarea
-          class="form-control"
-          formControlName="address"
-          id="address"
-          placeholder="Enter Customer Address"
-        ></textarea>
+        <label for="pwd">Cash/Online <label class="text-danger">*</label> </label>
+        <select class="form-control" formControlName="type"
+        id="type">
+          <option value="cash">Cash</option>
+          <option value="online">Online</option>
+        </select>
         <div
           class="text-danger"
           *ngIf="
-            myForm.get('address').invalid &&
-            (myForm.get('address').dirty || myForm.get('address').touched)
+            myForm.get('type').invalid &&
+            (myForm.get('type').dirty || myForm.get('type').touched)
           "
         >
-          Please provide a Address.
+          Please provide type.
         </div>
       </div>
       <div class="form-group">
-        <label for="pwd"
-          >Mobile Number <label class="text-danger">*</label></label
-        >
+        <label for="pwd">Amount <label class="text-danger">*</label></label>
         <input
           type="number"
-          formControlName="number"
+          formControlName="amount"
           class="form-control"
-          id="Number" placeholder="Enter Customer Number"
-        />
-        <div
-          class="text-danger"
-          *ngIf="
-            myForm.get('number').invalid &&
-            (myForm.get('number').dirty || myForm.get('number').touched)
-          "
-        >
-          Please provide a mobile number.
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="pwd">Jar Rate <label class="text-danger">*</label></label>
-        <input
-          type="number"
-          formControlName="rate"
-          class="form-control"
-          placeholder="Enter Jar Rate"
+          placeholder="Enter amount"
           id="Number"
         />
         <div
           class="text-danger"
           *ngIf="
-            myForm.get('rate').invalid &&
-            (myForm.get('rate').dirty || myForm.get('rate').touched)
+            myForm.get('amount').invalid &&
+            (myForm.get('amount').dirty || myForm.get('amount').touched)
           "
         >
-          Please provide a jar rate.
+          Please provide a amount.
         </div>
       </div>
-      <button type="submit" class="btn btn-primary"> {{customerId == null ? 'Save' : 'Update'}}</button>
+      <button type="submit" class="btn btn-primary"> {{dailyExpenceId == null ? 'Save' : 'Update'}}</button>
       <button type="button" class="btn btn-primary ml-2" routerLink="/cust">
         Cancel
       </button>
